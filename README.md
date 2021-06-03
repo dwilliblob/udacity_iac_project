@@ -78,6 +78,25 @@
 
 My Udacity project demonstrating how to build infrastructure as code on AWS using Cloudformation.
 
+### Assumptions
+Requirement of this project is that application optimsed for high availability. Therefore I have decided to deploy across two availability zones rather than optimising for cost and deploying in a single availbility zone.
+
+10.0.0.0/16 (256 x 256 = 65,000 available ip addresses)
+10.0.1.0/24 (255 available addresses)
+VPC provide private IP addresses
+Subnets smaller subsets of available IP address space
+Create subnets with expansion in mind
+
+### Resources (and explanation)
+* [Internet Gateway] - Provides access to users (testers) from the internet
+* [VPC Nat Service Gateway (1 & 2)] - Provides outbound internet access to resources in private subnets - translates incoming public traffic into private traffic - requires public access (locate in public subnet)
+* [Web Server (1 & 2)] - Manages Traffic from internet
+* [Autoscaling Group] - Enables high availability by scaling resources to meet demand (requires 2+ subnets)
+* [Load Balancer] - Provides a single entry point handling requests and distributing them equally across target group of servers providing common service
+* [EC2 Server] - 
+* [Security Group] - Manages inbound and outbound traffic for server instances
+* [Route Table] - Rules for routing traffic to specified address ranges (IPs)
+* [S3 Bucket] - AWS service outside VPC for storing assets and log files
 
 ### Built With
 
@@ -86,7 +105,11 @@ My Udacity project demonstrating how to build infrastructure as code on AWS usin
 * [](SHELL Scripts)
 * [](CLI Commands)
 
+### Stacks
 
+* VPC Stack
+* Network Stack
+* App Stack
 
 <!-- GETTING STARTED -->
 ## Getting Started
