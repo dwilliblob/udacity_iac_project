@@ -74,12 +74,12 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+(https://example.com)
 
-My Udacity project demonstrating how to build infrastructure as code on AWS using Cloudformation.
+Udagram web application - Udacity project demonstrating building infrastructure as code on AWS using Cloudformation.
 
 ### Assumptions
-Requirement of this project is that application optimsed for high availability. Therefore I have decided to deploy across two availability zones rather than optimising for cost and deploying in a single availbility zone.
+Requirement of this project is that application optimsed for high availability. Therefore I have assumed deploying should be across two availability zones rather than optimising for cost and deploying in a single availability zone.
 
 10.0.0.0/16 (256 x 256 = 65,000 available ip addresses)
 10.0.1.0/24 (255 available addresses)
@@ -87,23 +87,39 @@ VPC provide private IP addresses
 Subnets smaller subsets of available IP address space
 Create subnets with expansion in mind
 
-### Resources (and explanation)
+### Cloudformation Stacks
+
+#### Networking Infrastructure - udagram-network.yml
 * [Internet Gateway] - Provides access to users (testers) from the internet
-* [VPC Nat Service Gateway (1 & 2)] - Provides outbound internet access to resources in private subnets - translates incoming public traffic into private traffic - requires public access (locate in public subnet)
+* [Internet Gateway Attachment] - Enables connectivity between internet gateway and VPC
+* [ElasticIP 1 & 2] - Control allocation of IP's ensuring resources are provided with a consistent IP (Depends on Internet Gateway Attachment)
+* [Public Subnets 1 & 2] - Enable communications with outside world 
+* [Private Subnets 1 & 2] - Enables secure and controlled traffic to main application 
+* [Elastic IP 1 & 2] - Allows assiging consistent IP's for traffic routing
+* [NAT Gateways 1 & 2)] - Provides outbound internet access to resources in private subnets - translates incoming public traffic into private traffic - requires public access (locate in public subnet)
+* [Public Route Table] - Stores routing rules for our public subnets
+* [Default Public Route] - Provides a default route for internal VPC traffic to the outside world (via internet gateway)
+* [Public Subnet Route Table Association 1 & 2] - Associates public subnets 1 & 2 with public route table
+* [Private Route Table] - Stores routing rules for our private subnets
+* [Default Private Route] - Routes private traffic for 0.0.0.0/0 to our NAT Gateway preventing communication with outside world (keeps private traffic within VPC)
+* [Private Subnet Route Table Association 1 & 2] - Associates private subnets 1 & 2 with private route table
+
+#### Server Infrastructure - udagram-servers.yml
+
+
 * [Web Server (1 & 2)] - Manages Traffic from internet
 * [Autoscaling Group] - Enables high availability by scaling resources to meet demand (requires 2+ subnets)
-* [Load Balancer] - Provides a single entry point handling requests and distributing them equally across target group of servers providing common service
+* [Load Balancer] - Provides a single entry point handling requests and distributing them equally across target group of servers providing common service. AWS Load balancers require at least 2 subnets located in different availability zones
 * [EC2 Server] - 
 * [Security Group] - Manages inbound and outbound traffic for server instances
 * [Route Table] - Rules for routing traffic to specified address ranges (IPs)
 * [S3 Bucket] - AWS service outside VPC for storing assets and log files
 
-### Built With
+### Routing Rules
 
-* [](YAML files)
-* [](JSON files)
-* [](SHELL Scripts)
-* [](CLI Commands)
+* PublicRouteTable - This route table will have a default rule (AWS::EC2::Route) to allow all outbound traffic routed to the internet gateway. Next, we will attach this route table (AWS::EC2::SubnetRouteTableAssociation) to both our public subnets
+* PrivateRouteTable1 - This route table will have a default rule (AWS::EC2::Route) to route all outbound traffic to the NAT gateway (NatGateway1). We will associate this route table to the PrivateSubnet1
+* PrivateRouteTable2 - This route table is similar in nature to PrivateRouteTable1, except that it is routing the traffic to the NatGateway2, and will be attached to the PrivateSubnet2
 
 ### Stacks
 
