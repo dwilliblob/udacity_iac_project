@@ -1,7 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >
-  David Lee Williams / udacity project - Deploying a highly available web application
-  This template deploys the Udagram web application networking components
+  David Lee Williams / udacity project - This template deploys the Udagram web application networking components
 
 Parameters:
 
@@ -17,22 +16,22 @@ Parameters:
     PublicSubnet1CIDR:
         Description: IP range (CIDR notation) for public subnet in Availability Zone 1
         Type: String
-        Default: 10.0.10.0/24
+        Default: 10.0.0.0/24
 
     PublicSubnet2CIDR:
         Description: IP range (CIDR notation) for public subnet in Availability Zone 2
         Type: String
-        Default: 10.0.11.0/24
+        Default: 10.0.1.0/24
 
     PrivateSubnet1CIDR:
         Description: IP range (CIDR notation) for private subnet in Availability Zone 1
         Type: String
-        Default: 10.0.12.0/24
+        Default: 10.0.2.0/24
 
     PrivateSubnet2CIDR:
         Description: IP range (CIDR notation) for private subnet in Availability Zone 2
         Type: String
-        Default: 10.0.13.0/24  
+        Default: 10.0.3.0/24  
 Resources:
     VPC: 
         Type: AWS::EC2::VPC
@@ -186,6 +185,12 @@ Outputs:
         Value: !Ref VPC
         Export:
           Name: !Sub ${EnvironmentName}-VPC-ID
+
+    VPCCidrIP:
+        Description: Udagram VPC IP
+        Value: !GetAtt VPC.CidrBlock
+        Export:
+          Name: !Sub ${EnvironmentName}-VPC-IP
 
     VPCPublicRouteTable:
         Description: Udagram Public Routing
