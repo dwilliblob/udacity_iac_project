@@ -141,9 +141,3 @@ Outputs:
         Export:
           Name: !Sub ${EnvironmentName}-Public-IP
 
-    ProfileWithRolesForUdagramApp:
-        Description: Profile with roles for Udagram App
-        Value: !Join [",", [!Ref ProfileWithRolesForOurUdagramApp.Roles]]
-        Export:
-          Name: !Sub ${EnvironmentName}-PROF_ROLES
-
