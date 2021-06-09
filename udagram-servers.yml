@@ -56,10 +56,12 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           apt-get update -y
+          apt-get install unzip awscli -y
           apt-get install apache2 -y
           systemctl start apache2.service
           cd /var/www/html
-          echo "Udagram Web Server Up and Running!" > index.html         
+          aws s3 cp s3://udacity-demo-1/udacity.zip .
+          unzip -o udacity.zip        
       ImageId: ami-09a56048b08f94cdf
       KeyName: udagramwebapp
       SecurityGroups:
@@ -69,6 +71,7 @@ Resources:
       - DeviceName: "/dev/sdh"
         Ebs:
           VolumeSize: '10'
+
   WebApplicationGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
@@ -81,6 +84,7 @@ Resources:
       MaxSize: '4'
       TargetGroupARNs:
       - Ref: WebApplicationTargetGroup
+
   WebApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
@@ -89,6 +93,7 @@ Resources:
       - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
       SecurityGroups:
       - Ref: LoadBalancerSecurityGroup
+
   Listener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
@@ -100,6 +105,7 @@ Resources:
         Ref: WebApplicationLoadBalancer
       Port: '80'
       Protocol: HTTP
+
   ApplicationLoadBalancerListenerRule:
       Type: AWS::ElasticLoadBalancingV2::ListenerRule
       Properties:
@@ -111,6 +117,7 @@ Resources:
           Values: [/]
         ListenerArn: !Ref 'Listener'
         Priority: 1
+
   WebApplicationTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -126,11 +133,45 @@ Resources:
         Fn::ImportValue:
           Fn::Sub: "${EnvironmentName}-VPC-ID"
 
-  ProfileWithRolesForOurUdagramApp:
-    Type: AWS::IAM::InstanceProfile
-    Properties: 
+  RolePolicies:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: AmazonS3ReadOnlyAccess
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        -
+          Effect: Allow
+          Action:
+          - s3:Get*
+          - s3:List*
+          Resource: 
+          - arn:aws:s3:::udacity-demo-1
+          - arn:aws:s3:::udacity-demo-1/*
       Roles:
-        - UdacityS3ReadOnlyEC2
+      - Ref: UdacityS3ReadOnlyEC2
+
+  UdacityS3ReadOnlyEC2:
+      Type: AWS::IAM::Role
+      Properties:
+          RoleName:
+            !Sub ${EnvironmentName}-Role
+          AssumeRolePolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                - ec2.amazonaws.com
+              Action:
+              - sts:AssumeRole
+          Path: "/"
+
+  ProfileWithRolesForUdagram:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: UdacityS3ReadOnlyEC2
 
 Outputs:
     LoadBalancerPublicURL:
