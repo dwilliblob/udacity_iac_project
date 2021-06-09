@@ -40,7 +40,7 @@ Udacity project demonstrating deplying a webapp using infrastructure as code on 
 
 ### Assumptions
 1. This project is optimsed for high availability, therefore I have assumed deployment should be across two availability zones (rather than optimising for cost and deploying in a single availability zone).
-2. I have assumed the S3 bucket exists (as referred to in the Bash script) and complete with objects (web app files). For this reason I have not created an S3 bucket.
+2. I have assumed S3 bucket exists as referred to in project brief and includes objects (web app zip file). For this reason I have not created an S3 bucket.
 
 ### Cloudformation Stacks
 * UdagramNetwork
