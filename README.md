@@ -106,7 +106,17 @@ Clone the repo, setup the cloud network and servers.
     ./create.sh UdagramServers udagram-servers.yml udagram-server-parameters.json
    ```
 4. Visit the LoadBalancerPublicURL listed in UdagramServers outputs
-
+5. Delete the environment by running
+   ```
+    ./delete.sh UdagramServers
+   ``` 
+   and
+      ```
+    ./delete.sh UdagramServers
+   ```
 ### Bastion Server
-Screenshot evidence of setting up bastion server and accessing via ssh
+
+Used to access private EC2 instances within the VPC
+
+Screenshot evidence of setting up bastion server and accessing via ssh (using terminal zsh on MacOS)
 ![Bastion server screenshot](Website_Browser_screenshot.png?raw=true "Bastion Server Terminal Screenshot")
