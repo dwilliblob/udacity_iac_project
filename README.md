@@ -16,13 +16,15 @@
     <li>
       <a href="#About the project">About The Project</a>
       <ul>
-        <li><a href="#solution_diagram">Solution Architecture Diagram</a></li>
+        <li><a href="#solution diagram">Solution Diagram</a></li>
+        <li><a href="#assumptions">Assumptions</a></li>
+        <li><a href="#cloudformation stacks">Cloudformation Stacks</a></li>
+        <li><a href="#rubric">Rubric Checklist</a></li>
         <li><a href="#networking">Networking Infrastructure</a></li>
         <li><a href="#servers">Servers</a></li>
         <li><a href="#routing">Routing</a></li>
         <li><a href="#security groups">Security and groups</a></li>
         <li><a href="#bastion server">Bastion server evidence</a></li>
-        <li><a href="#rubric">Rubric Checklist</a></li>
       </ul>
     </li>
   </ol>
@@ -83,6 +85,32 @@ This is automated (using Cloudfront stacks) so that the infrastructure can be bu
 * UdagramNetwork
 * UdagramServers
 
+### Rubric
+
+>#### Basics
+|Criteria|Meets Specifications|Completed|
+|---|---|---|
+|Parameters|Parameter files should contain 1 or more params|YES|
+|Resources|Must include a LoadBalancer, LaunchConfig, AutoscalingGroup health check, security groups, Listener and Target Group|YES|
+|Outputs|Application URL i.e. Load Balancer DNS with 'http'|YES|
+|Working Test| Display Apache2 Ubuntu Server Default Page |YES|
+>#### Load Balancer
+|Criteria|Meets Specifications|Completed|
+|---|---|---|
+|Target Group|The auto-scaling group needs to have a property that associates it with a target group. The Load Balancer will have a Listener rule associated with the same target group|YES|
+|Health Check and Listener|Port 80 should be used in Security groups, health checks and listeners associated with the load balancer|YES|
+>#### Auto-Scaling
+|Criteria|Meets Specifications|Completed|
+|---|---|---|
+|Subnets|Use PRIV-NET ( private subnets ) for auto-scaling instances|YES|
+|Machine Specs| The machine should have 10 GB or more of disk and should be a t3.small or better|YES|
+|SSH Key|There shouldn’t be a ‘keyname’ property in the launch config|YES|
+>#### Bonus
+|Criteria|Meets Specifications|Completed|
+|---|---|---|
+|Output| Create values for output area|YES|
+|Bastion Host|Create Bastion Host and log into Private Server|YES|
+
 ### Networking
 * [Internet Gateway] - Provides access to users (testers) from the internet
 * [Internet Gateway Attachment] - Enables connectivity between internet gateway and VPC
@@ -125,29 +153,3 @@ Used to access private EC2 instances within the VPC
 
 Screenshot evidence of setting up bastion server and accessing via ssh (using terminal zsh on MacOS)
 ![Bastion server screenshot](Website_Browser_screenshot.png?raw=true "Bastion Server Terminal Screenshot")
-
-### Rubric
-
->#### Basics
-|Criteria|Meets Specifications|Completed|
-|---|---|---|
-|Parameters|Parameter files should contain 1 or more params|YES|
-|Resources|Must include a LoadBalancer, LaunchConfig, AutoscalingGroup health check, security groups, Listener and Target Group|YES|
-|Outputs|Application URL i.e. Load Balancer DNS with 'http'|YES|
-|Working Test| Display Apache2 Ubuntu Server Default Page |YES|
->#### Load Balancer
-|Criteria|Meets Specifications|Completed|
-|---|---|---|
-|Target Group|The auto-scaling group needs to have a property that associates it with a target group. The Load Balancer will have a Listener rule associated with the same target group|YES|
-|Health Check and Listener|Port 80 should be used in Security groups, health checks and listeners associated with the load balancer|YES|
->#### Auto-Scaling
-|Criteria|Meets Specifications|Completed|
-|---|---|---|
-|Subnets|Use PRIV-NET ( private subnets ) for auto-scaling instances|YES|
-|Machine Specs| The machine should have 10 GB or more of disk and should be a t3.small or better|YES|
-|SSH Key|There shouldn’t be a ‘keyname’ property in the launch config|YES|
->#### Bonus
-|Criteria|Meets Specifications|Completed|
-|---|---|---|
-|Output| Create values for output area|YES|
-|Bastion Host|Create Bastion Host and log into Private Server|YES|
