@@ -63,7 +63,6 @@ Resources:
           aws s3 cp s3://udacity-demo-1/udacity.zip .
           unzip -o udacity.zip        
       ImageId: ami-09a56048b08f94cdf
-      KeyName: udagramwebapp
       SecurityGroups:
       - Ref: WebServerSecurityGroup
       InstanceType: t2.medium

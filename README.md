@@ -16,6 +16,7 @@
         <li><a href="#routing">Routing</a></li>
         <li><a href="#security groups">Security and groups</a></li>
         <li><a href="#bastion server">Bastion server evidence</a></li>
+        <li><a href="#rubric">Rubric Checklist</a></li>
       </ul>
     </li>
     <li>
@@ -34,6 +35,14 @@
 
 Deploying a highly available web app - Udagram
 Udacity project demonstrating deplying a webapp using infrastructure as code on AWS Cloudformation.
+
+#### Scenario
+Developers push latest version of code in a zip file located in a public S3 Bucket.
+
+Using AWS Cloudfront, deploy application, along with the necessary supporting software into its matching infrastructure.
+
+This is automated (using Cloudfront stacks) so that the infrastructure can be built and discarded as soon as the testing team finishes their tests and gathers their results.
+
 
 ### Solution diagram
 ![AWS Cloudformation network and servers](DeployHighlyAvailableWebApp.png?raw=true "Solution Diagram")
@@ -66,7 +75,7 @@ Udacity project demonstrating deplying a webapp using infrastructure as code on 
 * [Launch Configuration] - Manages, monitors and maintains a specified number of compute resources providing resilience and reliability of our application
 * [Autoscaling Group] - Requires at least 2 subnets. A logical group of our EC2 instances
 * [Load Balancer] - Provides a single entry point handling requests and distributing them equally across target group of servers providing common service. AWS Load balancers require at least 2 subnets located in different availability zones
-* [EC2 Server] - AMI Ubuntu 18
+* [EC2] - AMI Ubuntu 18 - 2vCPU/4GB RAM 10GB Disk Space
 * [Security Group] - Manages inbound and outbound traffic for server instances
 * [Route Table] - Rules for routing traffic to specified address ranges (IPs)
 * [S3 Bucket] - AWS service outside VPC for storing assets and log files
@@ -80,9 +89,6 @@ Udacity project demonstrating deplying a webapp using infrastructure as code on 
 ### Security Groups
 * Web Server Security Group - Defines firewall rules and protocols open to network traffic
 * Load Balancer Security Group - Defines firewall rules and protocols open to network traffic
-
-### Key Pair
-udagramwebapp.pem
 
 
 <!-- GETTING STARTED -->
@@ -106,7 +112,7 @@ Clone the repo, setup the cloud network and servers.
     ./create.sh UdagramServers udagram-servers.yml udagram-server-parameters.json
    ```
 4. Visit the LoadBalancerPublicURL listed in UdagramServers outputs
-5. Delete the environment by running
+5. Discard and clean-up the environment by running
    ```
     ./delete.sh UdagramServers
    ``` 
@@ -120,3 +126,29 @@ Used to access private EC2 instances within the VPC
 
 Screenshot evidence of setting up bastion server and accessing via ssh (using terminal zsh on MacOS)
 ![Bastion server screenshot](Website_Browser_screenshot.png?raw=true "Bastion Server Terminal Screenshot")
+
+### Rubric
+
+>#### Basics
+|Criteria|Meets Specifications|Completed|
+|---|---|---|
+|Parameters|Parameter files should contain 1 or more params|YES|
+|Resources|Must include a LoadBalancer, LaunchConfig, AutoscalingGroup health check, security groups, Listener and Target Group|YES|
+|Outputs|Application URL i.e. Load Balancer DNS with 'http'|YES|
+|Working Test| Display Apache2 Ubuntu Server Default Page |YES|
+>#### Load Balancer
+|Criteria|Meets Specifications|Completed|
+|---|---|---|
+|Target Group|The auto-scaling group needs to have a property that associates it with a target group. The Load Balancer will have a Listener rule associated with the same target group|YES|
+|Health Check and Listener|Port 80 should be used in Security groups, health checks and listeners associated with the load balancer|YES|
+>#### Auto-Scaling
+|Criteria|Meets Specifications|Completed|
+|---|---|---|
+|Subnets|Use PRIV-NET ( private subnets ) for auto-scaling instances|YES|
+|Machine Specs| The machine should have 10 GB or more of disk and should be a t3.small or better|YES|
+|SSH Key|There shouldn’t be a ‘keyname’ property in the launch config|YES|
+>#### Bonus
+|Criteria|Meets Specifications|Completed|
+|---|---|---|
+|Output| Create values for output area|YES|
+|Bastion Host|Create Bastion Host and log into Private Server|YES|
