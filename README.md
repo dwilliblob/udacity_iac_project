@@ -8,6 +8,12 @@
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
     <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li>
       <a href="#About the project">About The Project</a>
       <ul>
         <li><a href="#solution_diagram">Solution Architecture Diagram</a></li>
@@ -19,16 +25,38 @@
         <li><a href="#rubric">Rubric Checklist</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
   </ol>
 </details>
 
+<!-- GETTING STARTED -->
+## Getting Started
 
+Clone the repo, setup the cloud network and servers.
+
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/dwilliblob/udacity_iac_project.git
+   ```
+2. Setup the network by running this command
+   ```sh
+    ./create.sh UdagramNetwork udagram-network.yml udagram-network-parameters.json
+   ```
+3. Setup the servers by running this command
+   ```
+    ./create.sh UdagramServers udagram-servers.yml udagram-server-parameters.json
+   ```
+4. Visit the LoadBalancerPublicURL listed in UdagramServers outputs
+5. Discard and clean-up the environment by running
+   ```
+    ./delete.sh UdagramServers
+   ``` 
+   and
+      ```
+    ./delete.sh UdagramNetwork
+   ```
 
 <!-- ABOUT THE PROJECT -->
 ### About the project
@@ -91,35 +119,6 @@ This is automated (using Cloudfront stacks) so that the infrastructure can be bu
 * Load Balancer Security Group - Defines firewall rules and protocols open to network traffic
 
 
-<!-- GETTING STARTED -->
-## Getting Started
-
-Clone the repo, setup the cloud network and servers.
-
-
-### Installation
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/dwilliblob/udacity_iac_project.git
-   ```
-2. Setup the network by running this command
-   ```sh
-    ./create.sh UdagramNetwork udagram-network.yml udagram-network-parameters.json
-   ```
-3. Setup the servers by running this command
-   ```
-    ./create.sh UdagramServers udagram-servers.yml udagram-server-parameters.json
-   ```
-4. Visit the LoadBalancerPublicURL listed in UdagramServers outputs
-5. Discard and clean-up the environment by running
-   ```
-    ./delete.sh UdagramServers
-   ``` 
-   and
-      ```
-    ./delete.sh UdagramServers
-   ```
 ### Bastion Server
 
 Used to access private EC2 instances within the VPC
